@@ -27,8 +27,8 @@
 }
 
 #scrolling{
-	height: 150 px;
 	overflow-y: scroll;
+	height: 500px;
 }
 </style>
 <script
