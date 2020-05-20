@@ -23,7 +23,12 @@
 	width: 500px;
 	border: 1px solid black;
 	margin: 10px;
-	overflow: auto;
+	
+}
+
+#scrolling{
+	height: 150 px;
+	overflow-y: scroll;
 }
 </style>
 <script
@@ -56,6 +61,7 @@
 				</select>
 
 				<div id=main>
+				<div id=scrolling>
 					<table border="1" width="100%">
 						<thead>
 							<tr>
@@ -73,11 +79,11 @@
 						</tr>
 					</table>
 					<!-- 					<pre>{{selectedInputLayout.fields | json}}</pre> -->
-		
+				</div>		
 				</div>
 				<button>Field Identification</button>
 			</td>
-			<td>
+			<td valign="top">
 				<span style="border: 1px solid black; margin: 15px;">Output	Layout Name</span> 
 				<select ng-model="selectedOutputLayout"	ng-options="x.name for x in layoutData">
 				</select>
@@ -100,7 +106,7 @@
 				<!-- 				<div ng-repeat="x in selectedOutputLayout.fields">{{x.name}}&emsp;|&emsp;{{x.tagName}}&emsp;|&emsp;{{x.length}}</div> -->
 				</div>
 				<button>Mapping Options</button></td>
-			<td>
+			<td valign="top">
 				<div id=main>Mapping Name</div>
 			</td>
 		</tr>
