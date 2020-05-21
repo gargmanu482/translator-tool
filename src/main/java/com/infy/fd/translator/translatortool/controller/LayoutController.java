@@ -83,7 +83,6 @@ public class LayoutController {
 			e.printStackTrace();
 
 		} catch (IOException ed) {
-			System.out.println("hello");
 			ed.printStackTrace();
 		}
 
