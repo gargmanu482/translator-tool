@@ -116,9 +116,11 @@ public class LayoutController {
 					// System.out.println(nm);
 					String nm1 = first.getAttribute("type");
 					field.setTagName(nm1);
-					// System.out.println(nm1);
 					String nm2 = first.getAttribute("minOccurs");
-					field.setMinOccurs(nm2);
+					if(nm2.equals("0"))
+						field.setMinOccurs("Optional");
+					else
+						field.setMinOccurs("Required");
 					field.setIsOutputfile(getIOFileName(file.getOriginalFilename()));
 					field.setFileExtension("xsd");
 					
