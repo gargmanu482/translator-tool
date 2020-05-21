@@ -89,6 +89,7 @@
 				</select>
 
 				<div id=main>
+				<div id=scrolling>
 					<table border="1" width="100%">
 						<thead>
 							<tr>
@@ -105,9 +106,10 @@
 				<!-- 				<pre>{{selectedOutputLayout.fields | json}}</pre> -->
 				<!-- 				<div ng-repeat="x in selectedOutputLayout.fields">{{x.name}}&emsp;|&emsp;{{x.tagName}}&emsp;|&emsp;{{x.length}}</div> -->
 				</div>
+				</div>
 				<button>Mapping Options</button></td>
 			<td valign="top">
-				<div id=main>Mapping Name</div>
+				<div id=main><div id=scrolling>Mapping Name</div></div>
 			</td>
 		</tr>
 	</table>
