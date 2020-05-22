@@ -23,12 +23,17 @@
 	width: 500px;
 	border: 1px solid black;
 	margin: 10px;
-	
 }
 
-#scrolling{
+#scrolling {
 	overflow-y: scroll;
 	height: 500px;
+}
+
+.highlight {
+	background-color: black;
+	color: white;
+	font-weight: bold;
 }
 </style>
 <script
@@ -38,78 +43,87 @@
 		style="border-bottom-color: black; border-style: groove;" width="50%"
 		border="1">
 		<tr align="center">
-			<td style="margin: 20px;">Client
+			<td style="margin: 20px;">Client <!-- <input type="text" ng-model="client"> -->
 
-			<!-- <input type="text" ng-model="client"> -->
-		
 				<select ng-model="clientName" ng-change="fetchLayout()">
 					<option ng-value="-1">Please select</option>
 					<option ng-repeat="x in clientList" ng-value="{{x}}">{{x}}</option>
-				</select>
+			</select>
 			</td>
 			<td></td>
 
-			<td>
-				<span style="margin: 15px;">Auto Generated Mapping Id</span>
+			<td><span style="margin: 15px;">Auto Generated Mapping Id</span>
 			</td>
 		</tr>
 		<tr align="center">
 
-			<td>
-				<span style="border: 1px solid black; margin: 15px;">Input Layout Name</span> 
-				<select ng-model="selectedInputLayout"	ng-options="x.name for x in layoutData ">
-				</select>
+			<td><span style="border: 1px solid black; margin: 15px;">Input
+					Layout Name</span> <select ng-model="selectedInputLayout"
+				ng-options="x.name for x in layoutData ">
+			</select>
 
 				<div id=main>
-				<div id=scrolling>
-					<table border="1" width="100%">
-						<thead>
-							<tr>
-								<td>Name</td>
-								<td>Type</td>
+					<div id=scrolling>
+						<table id="a" border="1" width="100%">
+							<thead>
+								<tr>
+									<td>Name</td>
+									<td>Type</td>
+								</tr>
+							</thead>
+							<tr ng-repeat="x in selectedInputLayout.fields"
+								ng-click="inputLayout(x)" ng-class="{'highlight':x==input}">
+								<td>{{x.name}}</td>
+								<td>{{x.tagName}}</td>
+								<td>{{x.minOccurs}}</td>
+								<!-- <td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}} {{x.minOccurs}}</td> -->
+								<!-- <td>{{x.isOutputfile}}</td> -->
+
 							</tr>
-						</thead>
-						<tr ng-repeat="x in selectedInputLayout.fields">
-							<td>{{x.name}}</td>
-							<td>{{x.tagName}}</td>
-							<td >{{x.minOccurs}} </td>
-							<!-- <td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}} {{x.minOccurs}}</td> -->
-							<!-- <td>{{x.isOutputfile}}</td> -->
-							
-						</tr>
-					</table>
-					<!-- 					<pre>{{selectedInputLayout.fields | json}}</pre> -->
-				</div>		
+						</table>
+						<!-- 					<pre>{{selectedInputLayout.fields | json}}</pre> -->
+					</div>
 				</div>
-				<button>Field Identification</button>
-			</td>
-			<td valign="top">
-				<span style="border: 1px solid black; margin: 15px;">Output	Layout Name</span> 
-				<select ng-model="selectedOutputLayout"	ng-options="x.name for x in layoutData">
-				</select>
+				<button>Field Identification</button></td>
+			<td valign="top"><span
+				style="border: 1px solid black; margin: 15px;">Output Layout
+					Name</span> <select ng-model="selectedOutputLayout"
+				ng-options="x.name for x in layoutData">
+			</select>
 
 				<div id=main>
-				<div id=scrolling>
-					<table border="1" width="100%">
-						<thead>
-							<tr>
-								<td>Name</td>
-								<td>Type</td>
+					<div id=scrolling>
+						<table border="1" width="100%">
+							<thead>
+								<tr>
+									<td>Name</td>
+									<td>Type</td>
+								</tr>
+							</thead>
+							<tr ng-click="outputLayout(x)"
+								ng-repeat="x in selectedOutputLayout.fields"
+								ng-class="{'highlight':x==output}">
+								<td>{{x.name}}</td>
+								<td>{{x.tagName}}</td>
+								<td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}}
+									{{x.minOccurs}}</td>
 							</tr>
-						</thead>
-						<tr ng-repeat="x in selectedOutputLayout.fields">
-							<td>{{x.name}}</td>
-							<td>{{x.tagName}}</td>
-							<td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}} {{x.minOccurs}}</td>
-						</tr>
-					</table>
-				<!-- 				<pre>{{selectedOutputLayout.fields | json}}</pre> -->
-				<!-- 				<div ng-repeat="x in selectedOutputLayout.fields">{{x.name}}&emsp;|&emsp;{{x.tagName}}&emsp;|&emsp;{{x.length}}</div> -->
+						</table>
+						<!-- 				<pre>{{selectedOutputLayout.fields | json}}</pre> -->
+						<!-- 				<div ng-repeat="x in selectedOutputLayout.fields">{{x.name}}&emsp;|&emsp;{{x.tagName}}&emsp;|&emsp;{{x.length}}</div> -->
+					</div>
 				</div>
-				</div>
-				<button>Mapping Options</button></td>
+				<button>Mapping Options</button> &nbsp;&nbsp;&nbsp;&nbsp;
+				<button ng-click="addToMapping()">-></button></td>
 			<td valign="top">
-				<div id=main><div id=scrolling>Mapping Name</div></div>
+				<div id=main>
+					<div id=scrolling>
+						Mapping Name</br>
+						<!-- <p>{{input.$$watchers[1].last}}{{out.$$watchers[1].last}}</p> -->
+						<p ng-repeat="x in mappingArray">{{x}}</p>
+					</div>
+				</div>
+
 			</td>
 		</tr>
 	</table>
@@ -214,6 +228,23 @@
 																	.log(response.data);
 															$scope.clientList = "Error occurred, Please try again.";
 														});
+										$scope.inputLayout=(e)=>{ 
+											 $scope.input=e;
+											 console.log(e.name)
+											
+										}
+										$scope.outputLayout=(e)=>{ 
+
+											$scope.output=e;
+											console.log(e.name)
+											
+										}
+										$scope.mappingArray=[];
+										$scope.addToMapping=()=>{
+											 console.log($scope.input.name+"-->"+$scope.output.name);
+											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name)
+											console.log($scope.mappingArray)
+										}
 
 									}
 								} ]);
