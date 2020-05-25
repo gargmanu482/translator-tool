@@ -64,18 +64,19 @@
 
 				<div id=main>
 					<div id=scrolling>
-						<table id="a" border="1" width="100%">
+						<table  border="1" width="100%">
 							<thead>
 								<tr>
-									<td>Name</td>
-									<td>Type</td>
+									<td ng-if="selectedInputLayout.fields[0].name">Name</td>
+									<td ng-if="selectedInputLayout.fields[0].tagName">Type</td>
+									<td ng-if="selectedInputLayout.fields[0].minOccurs">Req/Opt</td>
 								</tr>
 							</thead>
 							<tr ng-repeat="x in selectedInputLayout.fields"
 								ng-click="inputLayout(x)" ng-class="{'highlight':x==input}">
-								<td>{{x.name}}</td>
-								<td>{{x.tagName}}</td>
-								<td>{{x.minOccurs}}</td>
+								<td ng-if="x.name">{{x.name}}</td>
+								<td ng-if="x.tagName">{{x.tagName}}</td>
+								<td ng-if="x.minOccurs">{{x.minOccurs}}</td>
 								<!-- <td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}} {{x.minOccurs}}</td> -->
 								<!-- <td>{{x.isOutputfile}}</td> -->
 
@@ -105,8 +106,8 @@
 								ng-class="{'highlight':x==output}">
 								<td>{{x.name}}</td>
 								<td>{{x.tagName}}</td>
-								<td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}}
-									{{x.minOccurs}}</td>
+								<!-- <td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}}
+									{{x.minOccurs}}</td> -->
 							</tr>
 						</table>
 						<!-- 				<pre>{{selectedOutputLayout.fields | json}}</pre> -->
