@@ -243,7 +243,7 @@
 										$scope.mappingArray=[];
 										$scope.addToMapping=()=>{
 											 console.log($scope.input.name+"-->"+$scope.output.name);
-											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name)
+											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name+"="+$scope.input.name.substring(0,2)+$scope.output.name.substring(0,2))
 											console.log($scope.mappingArray)
 										}
 
