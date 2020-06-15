@@ -54,70 +54,58 @@ public class LayoutController {
 	Validator validator;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LayoutController.class);
-	
-	
-	@PostMapping(value="/java")
+
+	@PostMapping(value = "/java")
 	public ResponseEntity<String> generateJava(@RequestBody() String[] layoutArray) {
-		File file = new File("C:\\Users\\Malli\\Desktop\\translator-tool-master\\ref\\Music.java"); // initialize File object and passing path as argument
-		final String xmlFilePath="C:\\\\Users\\\\Malli\\\\Desktop\\\\translator-tool-master\\\\Documents\\\\newXml.xml";
+		File file = new File("C:\\Users\\Malli\\Desktop\\translator-tool-master\\ref\\Music.java"); // initialize File
+																									// object and
+																									// passing path as
+																									// argument
+		final String xmlFilePath = "C:\\\\Users\\\\Malli\\\\Desktop\\\\translator-tool-master\\\\Documents\\\\newXml.xml";
 		try {
 			file.createNewFile(); // creates a new file
-			 FileWriter fw=new FileWriter(file);    
-			 String classname = file.getName().split("\\.")[0];
-			 String allValues="";
-			 for(String layout:layoutArray) {
-				 allValues+=layout+" ";
-			 }
-			 String sourceCode = "import javax.xml.parsers.DocumentBuilder;\r\n" + 
-				 		"import javax.xml.parsers.DocumentBuilderFactory;\r\n" + 
-				 		"import org.w3c.dom.Document;\r\n" + 
-				 		"import org.w3c.dom.Element;\r\n" + 
-				 		"import javax.xml.parsers.ParserConfigurationException;\r\n" + 
-				 		"import javax.xml.transform.TransformerException;\r\n" + 
-				 		"import javax.xml.transform.TransformerFactory;\r\n" + 
-				 		"import javax.xml.transform.dom.DOMSource;\r\n" + 
-				 		"import javax.xml.transform.stream.StreamResult;\r\n" + 
-				 		"import javax.xml.transform.Transformer;\r\n" + 
-				 		"import java.io.File;\r\n"+
-				 		"public class " + classname + "{\r\n"+
-				 		" 	public static void main(String[] args) {\r\n"+
-				 		"		System.out.println(\"Hello world\");\r\n"+
-				 		"		String layoutString=\""+allValues+"\";\r\n"+
-				 		"		String trimmedLayout=layoutString.trim();\r\n"+
-				 		"		String[] layoutArr=trimmedLayout.split(\" \");\r\n"+
-				 		"		for(String layout:layoutArr){\r\n"+
-				 		"			System.out.println(layout);\n"+
-				 		"		}\r\n"+
-				 		"		try {\r\n"+
-				 		"			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();\r\n" + 
-				 		"			DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();\r\n" + 
-				 		"			Document document = documentBuilder.newDocument();\r\n" + 
-				 		"			Element root = document.createElement(\"Document\");\r\n"+
-				 		"			document.appendChild(root);\r\n"+
-				 		"			// root element\r\n" + 
-				 		"			for(String layout:layoutArr){\r\n"+
-				 		"			Element child = document.createElement(layout);\r\n"+
-				 		"			child.appendChild(document.createTextNode(\"hii\"));\r\n"+
-				 		"			root.appendChild(child);\r\n"+
-				 		"			}\r\n"+
-				 		"			TransformerFactory transformerFactory = TransformerFactory.newInstance();\r\n" + 
-				 		"           Transformer transformer = transformerFactory.newTransformer();\r\n" + 
-				 		"           DOMSource domSource = new DOMSource(document);\r\n" + 
-				 		"           StreamResult streamResult = new StreamResult(new File(\""+xmlFilePath+"\"));\r\n" + 
-				 		"           transformer.transform(domSource, streamResult);\r\n" + 
-				 		"           System.out.println(\"Done creating XML File\");\r\n" + 
-				 		"		} catch (ParserConfigurationException pce) {\r\n" + 
-				 		"			pce.printStackTrace();\r\n" + 
-				 		"		} catch (TransformerException tfe) {\r\n" + 
-				 		"			tfe.printStackTrace();\r\n" + 
-				 		"		}\n"+
-				 		"	}\r\n"+
-				 		"}";
-			 		
-			 
-	           fw.write(sourceCode);    
-	           fw.close();
-	           System.out.println("==========================================file cretated============================================");
+			FileWriter fw = new FileWriter(file);
+			String classname = file.getName().split("\\.")[0];
+			String allValues = "";
+			for (String layout : layoutArray) {
+				allValues += layout + " ";
+			}
+			String sourceCode = "import javax.xml.parsers.DocumentBuilder;\r\n"
+					+ "import javax.xml.parsers.DocumentBuilderFactory;\r\n" + "import org.w3c.dom.Document;\r\n"
+					+ "import org.w3c.dom.Element;\r\n" + "import javax.xml.parsers.ParserConfigurationException;\r\n"
+					+ "import javax.xml.transform.TransformerException;\r\n"
+					+ "import javax.xml.transform.TransformerFactory;\r\n"
+					+ "import javax.xml.transform.dom.DOMSource;\r\n"
+					+ "import javax.xml.transform.stream.StreamResult;\r\n"
+					+ "import javax.xml.transform.Transformer;\r\n" + "import java.io.File;\r\n" + "public class "
+					+ classname + "{\r\n" + " 	public static void main(String[] args) {\r\n"
+					+ "		System.out.println(\"Hello world\");\r\n" + "		String layoutString=\"" + allValues
+					+ "\";\r\n" + "		String trimmedLayout=layoutString.trim();\r\n"
+					+ "		String[] layoutArr=trimmedLayout.split(\" \");\r\n"
+					+ "		for(String layout:layoutArr){\r\n" + "			System.out.println(layout);\n"
+					+ "		}\r\n" + "		try {\r\n"
+					+ "			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();\r\n"
+					+ "			DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();\r\n"
+					+ "			Document document = documentBuilder.newDocument();\r\n"
+					+ "			Element root = document.createElement(\"Document\");\r\n"
+					+ "			document.appendChild(root);\r\n" + "			// root element\r\n"
+					+ "			for(String layout:layoutArr){\r\n"
+					+ "			Element child = document.createElement(layout);\r\n"
+					+ "			child.appendChild(document.createTextNode(\"hii\"));\r\n"
+					+ "			root.appendChild(child);\r\n" + "			}\r\n"
+					+ "			TransformerFactory transformerFactory = TransformerFactory.newInstance();\r\n"
+					+ "           Transformer transformer = transformerFactory.newTransformer();\r\n"
+					+ "           DOMSource domSource = new DOMSource(document);\r\n"
+					+ "           StreamResult streamResult = new StreamResult(new File(\"" + xmlFilePath + "\"));\r\n"
+					+ "           transformer.transform(domSource, streamResult);\r\n"
+					+ "           System.out.println(\"Done creating XML File\");\r\n"
+					+ "		} catch (ParserConfigurationException pce) {\r\n" + "			pce.printStackTrace();\r\n"
+					+ "		} catch (TransformerException tfe) {\r\n" + "			tfe.printStackTrace();\r\n"
+					+ "		}\n" + "	}\r\n" + "}";
+
+			fw.write(sourceCode);
+			fw.close();
+			LOGGER.debug("file generated successfully");
 		} catch (IOException e) {
 			e.printStackTrace(); // prints exception if any
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
@@ -296,7 +284,4 @@ public class LayoutController {
 		return extension;
 	}
 
-	
-	
-	
 }
