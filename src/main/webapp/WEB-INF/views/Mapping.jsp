@@ -124,7 +124,7 @@
 						<p ng-repeat="x in mappingArray">{{x}}</p>
 					</div>
 				</div>
-
+				<button ng-click="layoutMaster()">Done</button></td>
 			</td>
 		</tr>
 	</table>
@@ -195,7 +195,7 @@
 										console
 												.log("Layout Selected for client::: "
 														+ $scope.clientName);
-										var client = $scope.clientName;
+									var client = $scope.clientName;
 										var layoutUrl = "/client/" + client
 												+ "/layouts";
 
@@ -222,7 +222,7 @@
 																								name : "INPUT"
 																								
 																							}));
-
+															
 														},
 														function(response) {
 															console
@@ -235,19 +235,55 @@
 											
 										}
 										$scope.outputLayout=(e)=>{ 
-
 											$scope.output=e;
 											console.log(e.name)
 											
 										}
 										$scope.mappingArray=[];
+										$scope.mapArray=[];
 										$scope.addToMapping=()=>{
-											 console.log($scope.input.name+"-->"+$scope.output.name);
-											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name+"="+$scope.input.name.substring(0,2)+$scope.output.name.substring(0,2))
+											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name)
 											console.log($scope.mappingArray)
+											$scope.mapArray.push($scope.input.name+" "+$scope.output.name);
+											
 										}
-
+										
+										
+										$scope.layoutMaster = function() {
+										var layoutMasterVal = "/master/";
+										var data = new FormData();
+										$scope.mapVal=JSON.stringify($scope.mapArray);
+										data.append('client',$scope.clientName);
+										data.append('inputName',$scope.selectedInputLayout.name);
+										data.append('outputName',$scope.selectedOutputLayout.name);
+										data.append('mapValues',$scope.mapVal);
+										
+										console.log(JSON.stringify($scope.mapArray));
+										
+										var config = {
+											transformRequest : angular.identity,
+											transformResponse : angular.identity,
+											headers : {
+												'Content-Type' : undefined
+											}
+										}
+										
+										
+										$http
+										.post(layoutMasterVal,data,config)
+										.then(
+														function(response) {
+															
+															
+															console.log(response.data);
+														});
 									}
+									}
+									
+									
+									
+									
+									
 								} ]);
 	</script>
 
