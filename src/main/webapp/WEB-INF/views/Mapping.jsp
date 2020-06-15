@@ -97,15 +97,17 @@
 						<table border="1" width="100%">
 							<thead>
 								<tr>
-									<td>Name</td>
-									<td>Type</td>
+									<td ng-if="selectedOutputLayout.fields[0].name">Name</td>
+									<td ng-if="selectedOutputLayout.fields[0].typrName">Type</td>
+									<td ng-if="selectedOutputLayout.fields[0].minOccurs">minOccurs</td>
 								</tr>
 							</thead>
 							<tr ng-click="outputLayout(x)"
 								ng-repeat="x in selectedOutputLayout.fields"
 								ng-class="{'highlight':x==output}">
-								<td>{{x.name}}</td>
-								<td>{{x.tagName}}</td>
+								<td ng-if="x.name">{{x.name}}</td>
+								<td ng-if="x.tagName">{{x.tagName}}</td>
+								<td ng-if="x.minOccurs">{{x.minOccurs}}</td>
 								<!-- <td ng-if="x.fileExtension == 'xsd'">{{x.fileExtension}}
 									{{x.minOccurs}}</td> -->
 							</tr>
@@ -124,7 +126,8 @@
 						<p ng-repeat="x in mappingArray">{{x}}</p>
 					</div>
 				</div>
-
+				<button ng-click="generateJava()">Geneate Java</button>
+				<p ng-bind="uploadResult"></p>
 			</td>
 		</tr>
 	</table>
@@ -229,6 +232,27 @@
 																	.log(response.data);
 															$scope.clientList = "Error occurred, Please try again.";
 														});
+						
+										 $scope.generateJava=function(){
+												console.log("inside the method")
+												var url = "/java";
+												var data = $scope.mappingArray;
+												console.log(url)
+												console.log(data)
+												$http
+												.post(url, data)
+												.then(
+														function(response) {
+															console.log(response.data);
+															$scope.uploadResult = "File generated successfully!!";
+														},
+														function(response) {
+															console.log(response.data);
+															$scope.uploadResult = "Error occurred, Please try again.";
+														});
+											 }		
+										
+										
 										$scope.inputLayout=(e)=>{ 
 											 $scope.input=e;
 											 console.log(e.name)
@@ -242,8 +266,8 @@
 										}
 										$scope.mappingArray=[];
 										$scope.addToMapping=()=>{
-											 console.log($scope.input.name+"-->"+$scope.output.name);
-											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name)
+											 console.log($scope.input.name+" "+$scope.output.name);
+											$scope.mappingArray.push($scope.input.name+" "+$scope.output.name)
 											console.log($scope.mappingArray)
 										}
 

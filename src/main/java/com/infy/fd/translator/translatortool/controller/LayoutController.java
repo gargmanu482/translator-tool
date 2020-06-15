@@ -1,6 +1,7 @@
 package com.infy.fd.translator.translatortool.controller;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -10,6 +11,11 @@ import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -22,11 +28,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -37,7 +46,7 @@ import com.infy.fd.translator.translatortool.validator.Validator;
 
 @RestController
 public class LayoutController {
-	
+
 	@Autowired
 	private LayoutService layoutService;
 
@@ -45,6 +54,76 @@ public class LayoutController {
 	Validator validator;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LayoutController.class);
+	
+	
+	@PostMapping(value="/java")
+	public ResponseEntity<String> generateJava(@RequestBody() String[] layoutArray) {
+		File file = new File("C:\\Users\\Malli\\Desktop\\translator-tool-master\\ref\\Music.java"); // initialize File object and passing path as argument
+		final String xmlFilePath="C:\\\\Users\\\\Malli\\\\Desktop\\\\translator-tool-master\\\\Documents\\\\newXml.xml";
+		try {
+			file.createNewFile(); // creates a new file
+			 FileWriter fw=new FileWriter(file);    
+			 String classname = file.getName().split("\\.")[0];
+			 String allValues="";
+			 for(String layout:layoutArray) {
+				 allValues+=layout+" ";
+			 }
+			 String sourceCode = "import javax.xml.parsers.DocumentBuilder;\r\n" + 
+				 		"import javax.xml.parsers.DocumentBuilderFactory;\r\n" + 
+				 		"import org.w3c.dom.Document;\r\n" + 
+				 		"import org.w3c.dom.Element;\r\n" + 
+				 		"import javax.xml.parsers.ParserConfigurationException;\r\n" + 
+				 		"import javax.xml.transform.TransformerException;\r\n" + 
+				 		"import javax.xml.transform.TransformerFactory;\r\n" + 
+				 		"import javax.xml.transform.dom.DOMSource;\r\n" + 
+				 		"import javax.xml.transform.stream.StreamResult;\r\n" + 
+				 		"import javax.xml.transform.Transformer;\r\n" + 
+				 		"import java.io.File;\r\n"+
+				 		"public class " + classname + "{\r\n"+
+				 		" 	public static void main(String[] args) {\r\n"+
+				 		"		System.out.println(\"Hello world\");\r\n"+
+				 		"		String layoutString=\""+allValues+"\";\r\n"+
+				 		"		String trimmedLayout=layoutString.trim();\r\n"+
+				 		"		String[] layoutArr=trimmedLayout.split(\" \");\r\n"+
+				 		"		for(String layout:layoutArr){\r\n"+
+				 		"			System.out.println(layout);\n"+
+				 		"		}\r\n"+
+				 		"		try {\r\n"+
+				 		"			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();\r\n" + 
+				 		"			DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();\r\n" + 
+				 		"			Document document = documentBuilder.newDocument();\r\n" + 
+				 		"			Element root = document.createElement(\"Document\");\r\n"+
+				 		"			document.appendChild(root);\r\n"+
+				 		"			// root element\r\n" + 
+				 		"			for(String layout:layoutArr){\r\n"+
+				 		"			Element child = document.createElement(layout);\r\n"+
+				 		"			child.appendChild(document.createTextNode(\"hii\"));\r\n"+
+				 		"			root.appendChild(child);\r\n"+
+				 		"			}\r\n"+
+				 		"			TransformerFactory transformerFactory = TransformerFactory.newInstance();\r\n" + 
+				 		"           Transformer transformer = transformerFactory.newTransformer();\r\n" + 
+				 		"           DOMSource domSource = new DOMSource(document);\r\n" + 
+				 		"           StreamResult streamResult = new StreamResult(new File(\""+xmlFilePath+"\"));\r\n" + 
+				 		"           transformer.transform(domSource, streamResult);\r\n" + 
+				 		"           System.out.println(\"Done creating XML File\");\r\n" + 
+				 		"		} catch (ParserConfigurationException pce) {\r\n" + 
+				 		"			pce.printStackTrace();\r\n" + 
+				 		"		} catch (TransformerException tfe) {\r\n" + 
+				 		"			tfe.printStackTrace();\r\n" + 
+				 		"		}\n"+
+				 		"	}\r\n"+
+				 		"}";
+			 		
+			 
+	           fw.write(sourceCode);    
+	           fw.close();
+	           System.out.println("==========================================file cretated============================================");
+		} catch (IOException e) {
+			e.printStackTrace(); // prints exception if any
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
 
 	@PostMapping(value = "/layout")
 	public ResponseEntity<Layout> saveLayout(@RequestParam("uploadfile") MultipartFile file,
@@ -64,7 +143,7 @@ public class LayoutController {
 		List<Field> fields = new ArrayList<Field>();
 
 		try {
-			
+
 			File theDir = new File(UPLOAD_FOLDER);
 			if (!theDir.exists()) {
 				theDir.mkdir();
@@ -98,13 +177,13 @@ public class LayoutController {
 		factory.setValidating(false);
 		factory.setIgnoringElementContentWhitespace(true);
 		factory.setIgnoringComments(true);
-	
-        DocumentBuilder docBuilder = factory.newDocumentBuilder();
-        Document doc = docBuilder.parse (file.getInputStream()); 
+
+		DocumentBuilder docBuilder = factory.newDocumentBuilder();
+		Document doc = docBuilder.parse(file.getInputStream());
 		try {
-			
+
 			NodeList list = doc.getElementsByTagName("xs:element");
-			
+
 			// loop to print data
 			for (int i = 1; i < list.getLength(); i++) {
 				Field field = new Field();
@@ -117,13 +196,13 @@ public class LayoutController {
 					String nm1 = first.getAttribute("type");
 					field.setTagName(nm1);
 					String nm2 = first.getAttribute("minOccurs");
-					if(nm2.equals("0"))
+					if (nm2.equals("0"))
 						field.setMinOccurs("Optional");
 					else
 						field.setMinOccurs("Required");
 					field.setIsOutputfile(getIOFileName(file.getOriginalFilename()));
 					field.setFileExtension("xsd");
-					
+
 				}
 				fields.add(field);
 			}
@@ -136,15 +215,14 @@ public class LayoutController {
 	}
 
 	private boolean getIOFileName(String fileName) {
-		
+
 		String fileContain = "out";
-		boolean  isOutputfile = false;
-		if(fileName.contains(fileContain))
-		{
+		boolean isOutputfile = false;
+		if (fileName.contains(fileContain)) {
 			isOutputfile = true;
 		}
-		System.out.println("FileName"+fileName);
-		return isOutputfile; 
+		System.out.println("FileName" + fileName);
+		return isOutputfile;
 	}
 
 	@GetMapping(value = "/layout/{id}")
@@ -218,5 +296,7 @@ public class LayoutController {
 		return extension;
 	}
 
+	
+	
 	
 }
