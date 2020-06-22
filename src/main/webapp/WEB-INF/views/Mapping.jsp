@@ -126,7 +126,7 @@
 						<p ng-repeat="x in mapArray">{{x}}</p>
 					</div>
 				</div>
-				<button ng-click="generateJava(); layoutMaster()">Geneate Java</button>
+				<button ng-click="layoutMaster();">Geneate Java</button>
 				<p ng-bind="uploadResult"></p>
 			</td>
 		</tr>

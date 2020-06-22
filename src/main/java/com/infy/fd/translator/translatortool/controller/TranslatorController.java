@@ -23,14 +23,25 @@ public class TranslatorController {
 	@Autowired
 	FileUploadService fileUploadService;
 
-	@GetMapping("/home")
-	public ModelAndView getMessage(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		logger.info("Inside Controller");
+	@GetMapping("/uploadPage")
+	public ModelAndView getPage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		logger.info("Inside Login Controller");
 		ModelAndView model = new ModelAndView("Home");
-		model.addObject("msg", "hello world");
+		//model.addObject("msg", "hello world");
 		return model;
 	}
-
+	
+	
+	 @GetMapping("/home") 
+	 public ModelAndView getMessage(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	  logger.info("Inside Controller"); 
+	  ModelAndView model = new ModelAndView("Login"); 
+	  model.addObject("msg", "hello world"); 
+	  return model; 
+	  }
+	  
+	 
+	
 	@GetMapping("/test")
 	public ModelAndView getTestMessage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		logger.info("Inside Test Controller");
