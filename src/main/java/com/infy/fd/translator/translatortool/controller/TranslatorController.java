@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,12 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.infy.fd.translator.translatortool.model.Login;
+import com.infy.fd.translator.translatortool.repositoy.LoginRepository;
 import com.infy.fd.translator.translatortool.service.FileUploadService;
 
 @RestController
 public class TranslatorController {
 
 	private Logger logger = LoggerFactory.getLogger(TranslatorController.class);
+	
+	@Autowired
+	LoginRepository loginrepo;
 
 	@Autowired
 	FileUploadService fileUploadService;
@@ -31,6 +38,21 @@ public class TranslatorController {
 		return model;
 	}
 	
+	
+	@PostMapping("/login")
+	public ResponseEntity<String> validateValues(@RequestParam("name") String name, @RequestParam("password") String password){
+		Login login = new Login();
+		try {
+			login=loginrepo.findByName(name);
+			if(login.getPassword().equals(password)) {
+				return new ResponseEntity<String>(HttpStatus.OK);}
+			else
+				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 	 @GetMapping("/home") 
 	 public ModelAndView getMessage(HttpServletRequest request, HttpServletResponse response) throws Exception {
