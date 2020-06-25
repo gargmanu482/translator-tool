@@ -117,16 +117,17 @@
 					</div>
 				</div>
 				<button>Mapping Options</button> &nbsp;&nbsp;&nbsp;&nbsp;
-				<button ng-click="addToMapping()">-></button></td>
+				<button ng-click="validateMapping()">-></button>
+				<p ng-bind="mappingResult"></p></td>
 			<td valign="top">
 				<div id=main>
 					<div id=scrolling>
 						Mapping Name</br>
 						<!-- <p>{{input.$$watchers[1].last}}{{out.$$watchers[1].last}}</p> -->
-						<p ng-repeat="x in mapArray">{{x}}</p>
+						<p ng-repeat="x in mappingArray">{{x}}</p>
 					</div>
 				</div>
-				<button ng-click="layoutMaster();">Generate Java</button>
+				<button ng-click="layoutMaster();generateJava()">Generate Java</button>
 				<p ng-bind="uploadResult"></p>
 			</td>
 		</tr>
@@ -255,6 +256,7 @@
 										
 										$scope.inputLayout=(e)=>{ 
 											 $scope.input=e;
+											 $scope.mappingResult="";
 											 console.log(e.name)
 											
 										}
@@ -272,8 +274,31 @@
 											$scope.mapArray.push($scope.input.name+" "+$scope.output.name);
 											
 										}
-										
-										
+
+										$scope.validateMapping = function() {
+											var url = "/validateMapping";
+											var data = new FormData();
+											data.append('inputName',$scope.input.name);
+											data.append('outputName',$scope.output.name);
+											var config = {
+													transformRequest : angular.identity,
+													transformResponse : angular.identity,
+													headers : {
+														'Content-Type' : undefined
+													}
+												}
+											$http
+											.post(url, data,config)
+											.then(
+													function(response) {
+														console.log("valid mapping");
+														$scope.addToMapping();
+													},
+													function(response) {
+														$scope.mappingResult = response.data;
+													});
+											
+										}
 										$scope.layoutMaster = function() {
 										var layoutMasterVal = "/master/";
 										var data = new FormData();

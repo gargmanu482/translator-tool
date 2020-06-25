@@ -27,7 +27,7 @@ public class MappingController {
 	
 	public void saveMap() {
 		// TODO Auto-generated method stub
-		  File file= new File("C:\\Users\\user\\git\\translator-tool\\Documents\\MT202topacs009mapping02.xlsx"); 
+		  File file= new File("C:\\Users\\Malli\\git\\translator-tool\\Documents\\MT202 to pacs009 mapping v0.1.xlsx"); 
 		  FileInputStream inputStream = null; 
 		  mapRepo.deleteAll();
 		  try{ 
@@ -88,10 +88,8 @@ public class MappingController {
 					  mapRule.setDescription(rule);
 					  //System.out.println(mapRule.getDescription()+" "+mapRule.getFieldName()+" "+mapRule.getFieldTag()+" "+mapRule.getIdentification());
 					  mapRepo.save(mapRule);
-					  List<MappingRules> mpRule=mapRepo.findByFieldNameOrFieldTag(field,xmlTag);
-					  for (MappingRules mappingRules : mpRule) {
-						  System.out.println(mappingRules);
-					}
+					 MappingRules mpRule=mapRepo.findByFieldTag(xmlTag);
+					  System.out.println(mapRule);
 					  
 
 				  }

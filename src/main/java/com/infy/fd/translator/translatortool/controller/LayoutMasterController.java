@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.infy.fd.translator.translatortool.model.LayoutMaster;
 import com.infy.fd.translator.translatortool.repositoy.LayoutMasterRepository;
+import com.infy.fd.translator.translatortool.service.DataInsertionService;
 
 @RestController
 public class LayoutMasterController {
 	
 	@Autowired
 	private LayoutMasterRepository layoutRepo;
+	
+	
 	
 	@PostMapping(value = "/master/")
 	public ResponseEntity<String> saveDetails(@RequestParam("client") String client,@RequestParam("inputName") String input,
@@ -27,7 +30,7 @@ public class LayoutMasterController {
 		layoutRepo.save(layout);
 		
 		LayoutMaster layoutData = layoutRepo.getOne(client);
-		System.out.println(layoutData.getClientName()+" "+layoutData.getInputLayoutName()+" "+layoutData.getOutputLayoutName()+" "+layoutData.getMappingLsit());
+		System.out.println(layoutData.getClientName()+" "+layoutData.getInputLayoutName()+" "+layoutData.getOutputLayoutName());
 	
 		return new ResponseEntity<String>("Values inserted",HttpStatus.OK);
 	}

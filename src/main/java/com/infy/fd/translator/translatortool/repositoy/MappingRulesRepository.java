@@ -10,5 +10,5 @@ import com.infy.fd.translator.translatortool.model.MappingRules;
 @Repository
 public interface MappingRulesRepository extends JpaRepository<MappingRules, String>{
 	
-	public List<MappingRules> findByFieldNameOrFieldTag(String input,String output);
+	public MappingRules findByFieldTag(String input);
 }

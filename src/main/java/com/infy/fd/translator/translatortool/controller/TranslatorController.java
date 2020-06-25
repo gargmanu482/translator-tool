@@ -41,7 +41,7 @@ public class TranslatorController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> validateValues(@RequestParam("name") String name, @RequestParam("password") String password){
-		Login login = new Login();
+		Login login =null;
 		try {
 			login=loginrepo.findByName(name);
 			if(login.getPassword().equals(password)) {

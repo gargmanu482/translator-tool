@@ -22,6 +22,15 @@ public class LayoutMaster {
 	@Column(name = "mappingLsit")
 	private String mappingLsit;
 
+
+	public String getMappingLsit() {
+		return mappingLsit;
+	}
+
+	public void setMappingLsit(String mappingLsit) {
+		this.mappingLsit = mappingLsit;
+	}
+
 	public String getClientName() {
 		return clientName;
 	}
@@ -46,13 +55,7 @@ public class LayoutMaster {
 		this.outputLayoutName = outputLayoutName;
 	}
 
-	public String getMappingLsit() {
-		return mappingLsit;
-	}
-
-	public void setMappingLsit(String mappingLsit) {
-		this.mappingLsit = mappingLsit;
-	}
+	
 	
 	
 
