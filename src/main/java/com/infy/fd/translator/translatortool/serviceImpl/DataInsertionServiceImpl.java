@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,31 +39,32 @@ import java.io.File;
 
 @Service
 public class DataInsertionServiceImpl implements DataInsertionService {
-	
+
 	@Autowired
 	private MappingRulesRepository repo;
-	
+
 	@Override
-	public void insertData(String[] values) {
-		Map<String,String> valuesmap=parseValue();
-		
-		Map<String,String> insertionValues=new HashMap<>();
-		for(String a:values) {
-			String[] b=a.split("-->");
-			for(String c:b) {
-				MappingRules rules=(MappingRules) repo.findByFieldTag(c);
-				if(rules!=null) {
-					insertionValues.put(c, valuesmap.get(rules.getIdentification()));
-					
+	public void insertData(String[] mappingValues) {
+		Map<String, String> valuesmap = parseValue();
+
+		Map<String, String> insertionValues = new HashMap<>();
+		for (String mapping: mappingValues) {
+			String[] separatedTags= mapping.split("-->");
+			for (String tag : separatedTags) {
+				List<MappingRules> rule = repo.findByFieldTag(tag);
+				for (MappingRules rules : rule) {
+					if (rules != null) {
+						insertionValues.put(tag, valuesmap.get(rules.getIdentification()));
+
+					}
 				}
 			}
-				
+
 		}
 		insertValues(insertionValues);
-		
-		
+
 	}
-	
+
 	public Map<String, String> parseValue() {
 		Map<String, String> map = new HashMap<String, String>();
 		Pattern patt = Pattern.compile("[0-9]+[/A-Za-z\\s]*:[/0-9a-zA-Z-]+");
@@ -90,42 +92,38 @@ public class DataInsertionServiceImpl implements DataInsertionService {
 		return map;
 	}
 
-	public void insertValues(Map<String,String> values) {
-		
-		try {
-            //TODO - need to pass the string dynamically
-            String xmlFile = "C:\\Users\\Malli\\Desktop\\translator-tool-master\\Documents\\new.xml";
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(xmlFile);
+	public void insertValues(Map<String, String> values) {
 
-            //get the root element
-            Node root = document.getFirstChild();
-            
-            for(String val:values.keySet()) {
-            	String a="ns:"+val;
-            	System.out.println(val+"===================="+values.get(val));
-            	Node nodeElement = document.getElementsByTagName(a).item(0);
-                nodeElement.setTextContent(values.get(val));
-            }
-            
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource domSource = new DOMSource(document);
-            StreamResult xmlResult = new StreamResult(new File(xmlFile));
-            transformer.transform(domSource, xmlResult);
-            System.out.println("XML data population completed...");
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
+		try {
+			// TODO - need to pass the string dynamically
+			String xmlFile = "C:\\Users\\Malli\\Desktop\\translator-tool-master\\Documents\\new.xml";
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document document = documentBuilder.parse(xmlFile);
+
+			for (String val : values.keySet()) {
+				String a = "ns:" + val;
+				Node nodeElement = document.getElementsByTagName(a).item(0);
+				nodeElement.setTextContent(values.get(val));
+			}
+
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource domSource = new DOMSource(document);
+			StreamResult xmlResult = new StreamResult(new File(xmlFile));
+			transformer.transform(domSource, xmlResult);
+			System.out.println("XML data population completed...");
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

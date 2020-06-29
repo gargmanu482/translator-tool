@@ -18,24 +18,29 @@ public class MappingValidationServiceImpl implements MappingValidationService {
 	@Override
 	public boolean validateMappings(String input, String output) {
 		System.out.println(input);
-		MappingRules rules = mappingRepository.findByFieldTag(input.trim());
+		List<MappingRules> rules = mappingRepository.findByFieldTag(input.trim());
 		
-		if(rules!=null) {
+		if(!rules.isEmpty()) {
 			return validate(rules, input, output);
 		}else {
-			MappingRules rule = mappingRepository.findByFieldTag(output.trim());
+			List<MappingRules> rule = mappingRepository.findByFieldTag(output.trim());
 			return validate(rule, input, output);
 		}
 	}
 
-	public boolean validate(MappingRules mr, String input, String output) {
-						if ((input.trim().equalsIgnoreCase(mr.getFieldName()) && output.trim().equalsIgnoreCase(mr.getFieldTag()))
-					|| (input.trim().equalsIgnoreCase(mr.getFieldTag())
-							&& output.trim().equalsIgnoreCase(mr.getFieldName()))) {
+	public boolean validate(List<MappingRules> mappingRulesList, String input, String output) {
+		boolean flag=false;
+			for(MappingRules mappingRule:mappingRulesList) {
+						if ((input.trim().equalsIgnoreCase(mappingRule.getFieldName()) && output.trim().equalsIgnoreCase(mappingRule.getFieldTag()))
+					|| (input.trim().equalsIgnoreCase(mappingRule.getFieldTag())
+							&& output.trim().equalsIgnoreCase(mappingRule.getFieldName()))) {
 							
-				return true;
+							
+				flag= true;
+				break;
 			}
-		return false;
+			}
+		return flag;
 	}
 
 }

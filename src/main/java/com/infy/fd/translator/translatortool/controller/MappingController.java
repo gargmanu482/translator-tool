@@ -88,9 +88,10 @@ public class MappingController {
 					  mapRule.setDescription(rule);
 					  //System.out.println(mapRule.getDescription()+" "+mapRule.getFieldName()+" "+mapRule.getFieldTag()+" "+mapRule.getIdentification());
 					  mapRepo.save(mapRule);
-					 MappingRules mpRule=mapRepo.findByFieldTag(xmlTag);
-					  System.out.println(mapRule);
-					  
+					  List<MappingRules> mpRule1=mapRepo.findByFieldTag(xmlTag);
+					  for(MappingRules mpRule:mpRule1) {
+					  System.out.println(mapRule.getFieldName()+"====="+mapRule.getFieldTag()+"====="+mapRule.getIdentification()+"======="+mapRule.getDescription());
+					  }
 
 				  }
 				 

@@ -54,7 +54,7 @@ public class LayoutController {
 	Validator validator;
 	
 	@Autowired
-	private MappingController mc;
+	private MappingController masterController;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LayoutController.class);
 
@@ -66,7 +66,7 @@ public class LayoutController {
 	public ResponseEntity<Layout> saveLayout(@RequestParam("uploadfile") MultipartFile file,
 			@RequestParam("clientName") String clientName, @RequestParam("layoutName") String layoutName)
 			throws Exception {
-		mc.saveMap();
+		masterController.saveMap();
 		LOGGER.debug("REST request to save layout : {}");
 		Field field = new Field();
 		final String UPLOAD_FOLDER = "c:/uploadfile/";
