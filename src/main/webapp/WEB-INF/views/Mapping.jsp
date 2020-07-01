@@ -98,8 +98,8 @@
 							<thead>
 								<tr>
 									<td ng-if="selectedOutputLayout.fields[0].name">Name</td>
-									<td ng-if="selectedOutputLayout.fields[0].typrName">Type</td>
-									<td ng-if="selectedOutputLayout.fields[0].minOccurs">minOccurs</td>
+									<td ng-if="selectedOutputLayout.fields[0].tagName">Type</td>
+									<td ng-if="selectedOutputLayout.fields[0].minOccurs">OPt/Req</td>
 								</tr>
 							</thead>
 							<tr ng-click="outputLayout(x)"
@@ -117,8 +117,7 @@
 					</div>
 				</div>
 				<button>Mapping Options</button> &nbsp;&nbsp;&nbsp;&nbsp;
-				<button ng-click="validateMapping()">-></button>
-				<p ng-bind="mappingResult"></p></td>
+				<button ng-click="addToMapping()">-></button>
 			<td valign="top">
 				<div id=main>
 					<div id=scrolling>
@@ -237,7 +236,7 @@
 										 $scope.generateJava=function(){
 												console.log("inside the method")
 												var url = "/java";
-												var data = $scope.mappingArray;
+												var data = $scope.mapings;
 												console.log(url)
 												console.log(data)
 												$http
@@ -257,7 +256,9 @@
 										$scope.inputLayout=(e)=>{ 
 											 $scope.input=e;
 											 $scope.mappingResult="";
+											 console.log(e.identification)
 											 console.log(e.name)
+											 
 											
 										}
 										$scope.outputLayout=(e)=>{ 
@@ -267,38 +268,16 @@
 										}
 										$scope.mappingArray=[];
 										$scope.mapArray=[];
+										$scope.mapings=[];
 										$scope.addToMapping=()=>{
 											 console.log($scope.input.name+" "+$scope.output.name);
 											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name)
 											console.log($scope.mappingArray)
 											$scope.mapArray.push($scope.input.name+" "+$scope.output.name);
+											$scope.mapings.push($scope.output.name+"->"+$scope.input.identification);
 											
 										}
 
-										$scope.validateMapping = function() {
-											var url = "/validateMapping";
-											var data = new FormData();
-											data.append('inputName',$scope.input.name);
-											data.append('outputName',$scope.output.name);
-											var config = {
-													transformRequest : angular.identity,
-													transformResponse : angular.identity,
-													headers : {
-														'Content-Type' : undefined
-													}
-												}
-											$http
-											.post(url, data,config)
-											.then(
-													function(response) {
-														console.log("valid mapping");
-														$scope.addToMapping();
-													},
-													function(response) {
-														$scope.mappingResult = response.data;
-													});
-											
-										}
 										$scope.layoutMaster = function() {
 										var layoutMasterVal = "/master/";
 										var data = new FormData();
