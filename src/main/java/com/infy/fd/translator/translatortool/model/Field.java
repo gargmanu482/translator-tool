@@ -24,13 +24,7 @@ public class Field {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "field_id", unique = true, nullable = false)
-	private String fieldId;
-
-	@ManyToOne(targetEntity = Layout.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "layout_id")
-	@JsonIgnore
-	private Layout layout;
-
+	private Integer fieldId;
 	
 	 @Column(name = "name", nullable = false)
 	 private String name;
@@ -67,20 +61,12 @@ public class Field {
 		this.minOccurs = !minOccurs.equals(null)? minOccurs :"0";
 	}
 
-	public String getFieldId() {
+	public Integer getFieldId() {
 		return fieldId;
 	}
 
-	public void setFieldId(String fieldId) {
+	public void setFieldId(Integer fieldId) {
 		this.fieldId = fieldId;
-	}
-
-	public Layout getLayout() {
-		return layout;
-	}
-
-	public void setLayout(Layout layout) {
-		this.layout = layout;
 	}
 
 	public String getName(){ 

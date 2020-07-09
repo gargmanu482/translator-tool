@@ -1,8 +1,16 @@
 package com.infy.fd.translator.translatortool.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -10,6 +18,10 @@ import javax.persistence.Table;
 public class LayoutMaster {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "client_Id", unique = true, nullable = false)
+	private Integer clientId;
+	
 	@Column(name = "clientName")
 	private String clientName;
 	
@@ -19,16 +31,19 @@ public class LayoutMaster {
 	@Column(name = "outputLayoutName")
 	private String outputLayoutName;
 	
-	@Column(name = "mappingLsit")
-	private String mappingLsit;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "Layout_Master_Mapping", 
+	joinColumns = @JoinColumn(name = "client_Id"), 
+	inverseJoinColumns = @JoinColumn(name = "mappingId", unique = true))
+	private List<Mapping> mappingList;
 
 
-	public String getMappingLsit() {
-		return mappingLsit;
+	public List<Mapping> getMappingList() {
+		return mappingList;
 	}
 
-	public void setMappingLsit(String mappingLsit) {
-		this.mappingLsit = mappingLsit;
+	public void setMappingList(List<Mapping> mappingList) {
+		this.mappingList = mappingList;
 	}
 
 	public String getClientName() {
@@ -54,9 +69,5 @@ public class LayoutMaster {
 	public void setOutputLayoutName(String outputLayoutName) {
 		this.outputLayoutName = outputLayoutName;
 	}
-
-	
-	
-	
 
 }

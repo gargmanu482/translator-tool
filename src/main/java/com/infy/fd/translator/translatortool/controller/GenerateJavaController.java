@@ -94,19 +94,17 @@ public class GenerateJavaController {
 					+ "		try {\r\n"
 					+ "			//xsd file in your local\r\n"
 					+ "			String filename =\"C:\\\\Users\\\\Malli\\\\Desktop\\\\translator-tool-master\\\\Documents\\\\ISO_pacs.009.001.09.xsd\";\r\n"
-					+ "			// instance.\r\n" + "			\r\n"
+					+ "			// instance.\r\n" 
 					+ "			final Document doc = loadXsdDocument(filename);\r\n" 
-					+ "\r\n"
 					+ "			// Find the docs root element and use it to find the targetNamespace\r\n"
 					+ "			final Element rootElem = doc.getDocumentElement();\r\n"
 					+ "			Node node=(Node)rootElem;\r\n" 
 					+ "			String targetNamespace = null;\r\n"
 					+ "			if (rootElem != null && rootElem.getNodeName().equals(\"xs:schema\")) {\r\n"
 					+ "				targetNamespace = rootElem.getAttribute(\"targetNamespace\");\r\n"
-					+ "			}\r\n" 
-					+ "\r\n" 
+					+ "			}\r\n"
 					+ "			// Parse the file into an XSModel object\r\n"
-					+ "			XSModel xsModel = new XSParser().parse(filename);\r\n" + "\r\n"
+					+ "			XSModel xsModel = new XSParser().parse(filename);\r\n" 
 					+ "			// Define defaults for the XML generation\r\n"
 					+ "			XSInstance instance = new XSInstance();\r\n"
 					+ "			instance.minimumElementsGenerated = 1;\r\n"
@@ -116,31 +114,30 @@ public class GenerateJavaController {
 					+ "			instance.maximumRecursionDepth = 0;\r\n"
 					+ "			instance.generateAllChoices = true;\r\n"
 					+ "			instance.showContentModel = true;\r\n"
-					+ "			instance.generateOptionalElements = true;\r\n" + "			\r\n"
+					+ "			instance.generateOptionalElements = true;\r\n"
 					+ "			Element name=(Element)doc.getElementsByTagName(\"xs:element\").item(0);\r\n"
 					+ "			QName rootElement = new QName(targetNamespace,name.getAttribute(\"name\"));\r\n"
-					+ "			\r\n" + "			//xml file creation file\r\n"
+					+ "			//xml file creation file\r\n"
 					+ "			XMLDocument sampleXml = new XMLDocument(new StreamResult(\"C:\\\\Users\\\\Malli\\\\Desktop\\\\translator-tool-master\\\\Documents\\\\new.xml\"), true, 4, null);\r\n"
-					+ "			//System.out.println(\"Check point 3\");\r\n"
+					+"			sampleXml.getNamespaceSupport().setSuggestPrefix(\"\");\r\n"
 					+ "			instance.generate(xsModel, rootElement, sampleXml);\r\n"
 					+ "			System.out.println(\"file created\");\r\n"
 					+"			String mappings=\""+allValues+"\";"
 					+"			String[] a=mappings.split(\" \");"
-					+classname+" b=new "+classname+"();\r\n"
-					+"b.insertData(a);"
+								+classname+" b=new "+classname+"();\r\n"
+					+"			b.insertData(a);"
 					+ "		} catch (TransformerConfigurationException e) {\r\n"
-					+ "			// TODO Auto-generated catch block\r\n" + "			e.printStackTrace();\r\n"
+					+ "			// TODO Auto-generated catch block\r\n"
+					+ "			e.printStackTrace();\r\n"
 					+ "		}\r\n" 
 					+ "	}" 
 					+ "public static Document loadXsdDocument(String inputName) {\r\n"
 					+ "		final String filename = inputName;\r\n" 
-					+ "\r\n"
 					+ "		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();\r\n"
 					+ "		factory.setValidating(false);\r\n"
 					+ "		factory.setIgnoringElementContentWhitespace(true);\r\n"
 					+ "		factory.setIgnoringComments(true);\r\n" 
 					+ "		Document doc = null;\r\n" 
-					+ "\r\n"
 					+ "		try {\r\n" 
 					+ "			final DocumentBuilder builder = factory.newDocumentBuilder();\r\n"
 					+ "			final File inputFile = new File(filename);\r\n"
@@ -154,8 +151,8 @@ public class GenerateJavaController {
 					+ "		return doc;\r\n" 
 					+ "	}" 
 					+"public Map<String, String> parseValue() {\r\n" + 
-					"		Map<String, String> map = new HashMap<String, String>();\r\n" + 
-					"		Pattern patt = Pattern.compile(\"[0-9]+[/A-Za-z\\\\s]*:[/0-9a-zA-Z-]+\");\r\n" + 
+					"Map<String, String> map = new HashMap<String, String>();\r\n" + 
+					"		Pattern patt = Pattern.compile(\"[:]?[0-9]+[/A-Za-z\\\\s]*:[/0-9a-zA-Z-]+\");\r\n" + 
 					"		try {\r\n" + 
 					"			BufferedReader r = new BufferedReader(\r\n" + 
 					"					new FileReader(\"C:\\\\Users\\\\Malli\\\\git\\\\translator-tool\\\\Documents\\\\01. MT202 input.txt\"));\r\n" + 
@@ -166,8 +163,14 @@ public class GenerateJavaController {
 					"				while (m.find()) {\r\n" + 
 					"					int start = m.start(0);\r\n" + 
 					"					int end = m.end(0);\r\n" + 
-					"					a = line.substring(start, end).split(\":\");\r\n" + 
-					"					map.put(a[0], a[1]);\r\n" + 
+					"					String b = line.substring(start, end);\r\n" + 
+					"					if(b.startsWith(\":\")) {\r\n" + 
+					"						a=line.substring(start+1, end).split(\":\");\r\n" + 
+					"						map.put(\":\"+a[0]+\":\", a[1]);\r\n" + 
+					"					}else {\r\n" + 
+					"						a=line.substring(start, end).split(\":\");\r\n" + 
+					"						map.put(a[0]+\":\", a[1]);\r\n" + 
+					"					}\r\n" + 
 					"				}\r\n" + 
 					"\r\n" + 
 					"			}\r\n" + 
@@ -179,8 +182,7 @@ public class GenerateJavaController {
 					"		}\r\n" + 
 					"		for(String a:map.keySet()) {\r\n" + 
 					"			System.out.println(a+\"..............................\"+map.get(a));\r\n" + 
-					"		}\r\n" + 
-					"		return map;\r\n" + 
+					"		}\r\n" + 				"		return map;\r\n" + 
 					"	}"+
 					"public void insertData(String[] mappingValues) {\r\n" + 
 					"\r\n" + 
@@ -211,8 +213,7 @@ public class GenerateJavaController {
 					"			for (String val : values.keySet()) {\r\n" + 
 					"				\r\n" + 
 					"				System.out.println(val+\"=====================\"+values.get(val));\r\n" + 
-					"				String a = \"ns:\" + val;\r\n" + 
-					"				Node nodeElement = document.getElementsByTagName(a).item(0);\r\n" + 
+					"				Node nodeElement = document.getElementsByTagName(val).item(0);\r\n" + 
 					"				System.out.println(\"****************************\"+nodeElement);\r\n" + 
 					"				nodeElement.setTextContent(values.get(val));\r\n" + 
 					"			}\r\n" + 

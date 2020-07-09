@@ -24,9 +24,6 @@ public class LayoutServiceImpl implements LayoutService {
 
 	@Override
 	public Layout saveLayout(Layout layout) throws Exception {
-		for (Field field : layout.getFields()) {
-			field.setLayout(layout);
-		}
 		
 		return layoutRepository.save(layout);
 	}

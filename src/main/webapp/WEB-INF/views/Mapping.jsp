@@ -273,7 +273,7 @@
 											 console.log($scope.input.name+" "+$scope.output.name);
 											$scope.mappingArray.push($scope.input.name+"-->"+$scope.output.name)
 											console.log($scope.mappingArray)
-											$scope.mapArray.push($scope.input.name+" "+$scope.output.name);
+											$scope.mapArray.push($scope.input.name+":"+$scope.output.name);
 											$scope.mapings.push($scope.output.name+"->"+$scope.input.identification);
 											
 										}
@@ -281,7 +281,7 @@
 										$scope.layoutMaster = function() {
 										var layoutMasterVal = "/master/";
 										var data = new FormData();
-										$scope.mapVal=JSON.stringify($scope.mapArray);
+										$scope.mapVal=$scope.mapArray
 										data.append('client',$scope.clientName);
 										data.append('inputName',$scope.selectedInputLayout.name);
 										data.append('outputName',$scope.selectedOutputLayout.name);
